@@ -2,9 +2,12 @@ import Figure.AbstractFigure;
 
 public class Square {
     private AbstractFigure figure;
-    
-    public Square(){
+    private boolean hasFigure;
+    private String position;
 
+    public Square(String position, boolean hasFigure){
+        this.hasFigure = hasFigure;
+        this.position = position;
     }
 
     public void setFigure(AbstractFigure figure) {
@@ -13,5 +16,13 @@ public class Square {
 
     public AbstractFigure getFigure(){
         return figure;
+    }
+
+    public boolean containsFigure(){
+        return hasFigure;
+    }
+
+    public String getPosition(){
+        return position;
     }
 }
