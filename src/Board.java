@@ -1,7 +1,9 @@
 import Figure.*;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board extends JPanel{
@@ -9,6 +11,7 @@ public class Board extends JPanel{
     private Map<String, Integer[]> coordinates;
     int x_pos = 0;
     int y_pos = 0;
+    private List<AbstractFigure> figures;
 
     public Board(){
         JFrame frame = new JFrame();
@@ -19,13 +22,15 @@ public class Board extends JPanel{
 
         tiles = new Square[8][8];
         coordinates = new HashMap<>();
+        figures = new ArrayList<>();
+
         this.setSize(800,800);
         this.setBackground(Color.RED);
         frame.add(this);
         int letter = 'A';
         for(int i = 0; i <8; i++){
             for(int j = 0; j <8; j++){
-                tiles[i][j] = new Square(Character.toString((char) letter) + String.valueOf(j+1),false);
+                tiles[i][j] = new Square(Character.toString((char) letter) + String.valueOf(j+1),null);
                 coordinates.put(tiles[i][j].getPosition(),new Integer[]{x_pos,y_pos});
                 x_pos +=100;
             }
@@ -34,16 +39,6 @@ public class Board extends JPanel{
             letter++;
         }
 
-        for(int i = 0; i <8; i++){
-            for(int j = 0; j <8; j++){
-                System.out.print(tiles[i][j].getPosition()+ ": ");
-                for(Integer integer : coordinates.get(tiles[i][j].getPosition())){
-                    System.out.print(integer +", ");
-                }
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
     }
 
     private void initFigures(){
@@ -81,6 +76,8 @@ public class Board extends JPanel{
         Pawn blackPawn6 = new Pawn(false, false, 300, 700);
         Pawn blackPawn7 = new Pawn(false, false, 300, 700);
         Pawn blackPawn8 = new Pawn(false, false, 300, 700);
+        figures.add(whiteKing);
+        
     }
 
     public void paintComponent(Graphics g){
