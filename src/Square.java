@@ -2,15 +2,21 @@ import Figure.AbstractFigure;
 
 public class Square {
     private AbstractFigure figure;
-    private String position;
+    private int x_pos;
+    private int y_pos;
 
-    public Square(String position, AbstractFigure figure){
+    public Square(int x_pos, int y_pos, AbstractFigure figure){
         this.figure = figure;
-        this.position = position;
+        this.x_pos = x_pos;
+        this.y_pos = y_pos;
     }
 
     public void setFigure(AbstractFigure figure) {
         this.figure = figure;
+    }
+
+    public void removeFigure(AbstractFigure figure){
+        this.figure = null;
     }
 
     public AbstractFigure getFigure(){
@@ -21,7 +27,12 @@ public class Square {
         return figure != null;
     }
 
-    public String getPosition(){
-        return position;
+    public int getY_Position(){
+        return y_pos;
     }
+
+    public int getX_Position(){
+        return x_pos;
+    }
+
 }
