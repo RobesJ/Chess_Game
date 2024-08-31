@@ -1,12 +1,7 @@
 import Figure.AbstractFigure;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-public class Square extends JPanel {
+public class Square {
     private AbstractFigure figure;
-    private String position;
     private int x_pos;
     private int y_pos;
 
@@ -14,14 +9,6 @@ public class Square extends JPanel {
         this.figure = figure;
         this.x_pos = x_pos;
         this.y_pos = y_pos;
-        this.setPreferredSize(new Dimension(100,100));
-        this.setFocusable(true);
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                handleClick();
-            }
-        });
     }
 
     public void setFigure(AbstractFigure figure) {
@@ -40,25 +27,11 @@ public class Square extends JPanel {
         return figure != null;
     }
 
-
-    public int getX_Position(){
-        return x_pos;
-    }
-
     public int getY_Position(){
         return y_pos;
     }
 
-    public String getPosition(){
-        return position;
-    }
-
-    public void handleClick(){
-        if(containsFigure()){
-            System.out.println("Contains: " + figure.getClass().getSimpleName());
-        }
-        else{
-            System.out.println("Empty square with location: " + getX_Position() +","+getY_Position());
-        }
+    public int getX_Position(){
+        return x_pos;
     }
 }
