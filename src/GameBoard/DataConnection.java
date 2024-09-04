@@ -1,3 +1,5 @@
+package GameBoard;
+
 import java.sql.*;
 
 public class DataConnection {

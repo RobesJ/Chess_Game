@@ -1,5 +1,7 @@
 package Figure;
 
+import GameBoard.Square;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +16,7 @@ public class Bishop extends AbstractFigure{
     static {
         try {
             BufferedImage img = ImageIO.read(new File("/home/robes/Plocha/Chess/svg_pieces/white-bishop-svgrepo-com.png"));
-            Image scaledImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            Image scaledImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             whiteBishopIcon = new ImageIcon(scaledImg);
             BufferedImage img2 = ImageIO.read(new File("/home/robes/Plocha/Chess/svg_pieces/black-bishop-svgrepo-com.png"));
             Image scaledImg2 = img2.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
@@ -28,4 +30,14 @@ public class Bishop extends AbstractFigure{
         super(White, killed);
     }
 
+    public Icon getWhiteBishopIcon(){
+        return whiteBishopIcon;
+    }
+    public Icon getBlackBishopIcon(){
+        return blackBishopIcon;
+    }
+
+    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
+        return Math.abs(end_pos[1]-start_pos[1]) == Math.abs(end_pos[0] - start_pos[0]);
+    }
 }
