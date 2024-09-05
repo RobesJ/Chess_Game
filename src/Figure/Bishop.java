@@ -38,6 +38,22 @@ public class Bishop extends AbstractFigure{
     }
 
     public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        return Math.abs(end_pos[1]-start_pos[1]) == Math.abs(end_pos[0] - start_pos[0]);
+        if(Math.abs(end_pos[0] - start_pos[0]) == Math.abs(end_pos[1] - start_pos[1])) {
+            int stepRow = (end_pos[0] > start_pos[0]) ? 1 : -1;
+            int stepCol = (end_pos[1] > start_pos[1]) ? 1 : -1;
+
+            int x = start_pos[0] + stepRow;
+            int y = start_pos[1] + stepCol;
+
+            while (x != end_pos[0] && y != end_pos[1]) {
+                if (tiles[x][y].containsFigure()) {
+                    return false;
+                }
+                x += stepRow;
+                y += stepCol;
+            }
+            return true;
+        }
+        return false;
     }
 }

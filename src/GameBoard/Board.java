@@ -93,29 +93,34 @@ public class Board extends JPanel {
         int row = e.getY()/100;
         int col = e.getX()/100;
 
+        //if selected square contains figure
         if(tiles[row][col].containsFigure()) {
+            //if nothing is selected yet
             if(selectedFigure == null){
                 selectedFigure = tiles[row][col].getFigure();
                 tiles[row][col].getLabel().setOpaque(true);
                 selectedFigure_col = col;
                 selectedFigure_row = row;
             }
+            // clicked on already selected, same figure
             else if(selectedFigure.equals(tiles[row][col].getFigure())){
                 selectedFigure = null;
+                tiles[row][col].getLabel().setOpaque(false);
             }
+            //kill figure of another color
             else if (selectedFigure.isWhite() != tiles[row][col].getFigure().isWhite()) {
                 if(selectedFigure.move(new int[]{selectedFigure_row,selectedFigure_col},new int[]{row,col},tiles)) {
                     tiles[selectedFigure_row][selectedFigure_col].getFigure().setKilled(true);
-                    tiles[selectedFigure_row][selectedFigure_col].removeFigure(selectedFigure);
+                    tiles[selectedFigure_row][selectedFigure_col].removeFigure();
                     tiles[row][col].setFigure(selectedFigure);
                     selectedFigure = null;
                 }
             }
-
+        //if square does not contain figure then move the selected figure, if the movement is valid for the selected figure
         } else if (!tiles[row][col].containsFigure()){
             if(selectedFigure != null){
                 if(selectedFigure.move(new int[]{selectedFigure_row,selectedFigure_col},new int[]{row,col},tiles)){
-                    tiles[selectedFigure_row][selectedFigure_col].removeFigure(selectedFigure);
+                    tiles[selectedFigure_row][selectedFigure_col].removeFigure();
                     tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(false);
                     tiles[row][col].setFigure(selectedFigure);
                     selectedFigure = null;
@@ -124,10 +129,6 @@ public class Board extends JPanel {
         }
         revalidate();
         repaint();
-    }
-
-    public Square[][] getTiles(){
-        return tiles;
     }
 
     public static void main(String[] args) {

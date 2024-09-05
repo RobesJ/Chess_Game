@@ -56,11 +56,10 @@ public class Queen extends AbstractFigure{
             }
             return true;
         }
-        else if (Math.abs(end_pos[0] - start_pos[0]) == Math.abs(end_pos[1]) - start_pos[1]) {
+        else if (Math.abs(end_pos[0] - start_pos[0]) == Math.abs(end_pos[1] - start_pos[1])) {
             int xStep = (end_pos[0] > start_pos[0]) ? 1 : -1;
             int yStep = (end_pos[1] > start_pos[1]) ? 1 : -1;
 
-            // Check each square along the diagonal path
             int x = start_pos[0] + xStep;
             int y = start_pos[1] + yStep;
             while (x != end_pos[0] && y != end_pos[1]) {

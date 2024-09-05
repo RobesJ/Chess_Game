@@ -65,7 +65,7 @@ public class Square extends JPanel {
         }
     }
 
-    public void removeFigure(AbstractFigure figure){
+    public void removeFigure(){
         this.figure = null;
         label.setVisible(false);
     }

@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Pawn extends AbstractFigure{
     static Icon whitePawnIcon;
     static Icon blackPawnIcon;
-    private int begginingRow;
+    private final int beginningRow;
 
     static {
         try {
@@ -28,7 +28,7 @@ public class Pawn extends AbstractFigure{
 
     public Pawn(boolean White, boolean killed, int begPosX){
         super(White, killed);
-        this.begginingRow = begPosX;
+        this.beginningRow = begPosX;
     }
 
     public Icon getWhitePawnIcon(){
@@ -41,17 +41,20 @@ public class Pawn extends AbstractFigure{
     //[0] = row, [1] = col
     @Override
     public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        if(isWhite()){
-            if(start_pos[0] == begginingRow){
-                return start_pos[1] == end_pos[1] && (start_pos[0] - end_pos[0] ==1 || start_pos[0] - end_pos[0] ==2);
+        if(!tiles[end_pos[0]][end_pos[1]].containsFigure()){
+            if (isWhite()) {
+                if (start_pos[0] == beginningRow) {
+                    return start_pos[1] == end_pos[1] && (start_pos[0] - end_pos[0] == 1 || start_pos[0] - end_pos[0] == 2);
+                }
+                return start_pos[1] == end_pos[1] && start_pos[0] - end_pos[0] == 1;
+            } else {
+                if (start_pos[0] == beginningRow) {
+                    return start_pos[1] == end_pos[1] && (end_pos[0] - start_pos[0] == 1 || end_pos[0] - start_pos[0] == 2);
+                }
+                return start_pos[1] == end_pos[1] && end_pos[0] - start_pos[0] == 1;
             }
-            return start_pos[1] == end_pos[1] && start_pos[0]-end_pos[0] ==1;
         }
-        else {
-            if (start_pos[0] == begginingRow) {
-                return start_pos[1] == end_pos[1] && (end_pos[0] - start_pos[0] == 1 || end_pos[0] - start_pos[0] == 2);
-            }
-            return start_pos[1] == end_pos[1] && end_pos[0] - start_pos[0] == 1;
-        }
+        else
+            return (Math.abs(end_pos[0]-start_pos[0]) ==1) && (Math.abs(end_pos[1]-start_pos[1]) ==1) && tiles[end_pos[0]][end_pos[1]].containsFigure();
     }
 }
