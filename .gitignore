@@ -2,7 +2,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-!**/src/GameBoard/DataConnection
+!**/src/GameBoard/DataConnection.java
 
 ### Eclipse ###
 .apt_generated
