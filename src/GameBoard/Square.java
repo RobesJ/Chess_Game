@@ -7,14 +7,10 @@ import java.awt.*;
 
 public class Square extends JPanel {
     private AbstractFigure figure;
-    private int x_pos;
-    private int y_pos;
-    private JLabel label;
+    private final JLabel label;
 
-    public Square(int x_pos, int y_pos, AbstractFigure figure){
+    public Square(AbstractFigure figure){
         this.figure = figure;
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
         label = new JLabel();
         label.setOpaque(false);
         label.setVisible(false);
@@ -80,13 +76,5 @@ public class Square extends JPanel {
 
     public JLabel getLabel(){
         return label;
-    }
-
-    public int getY_Position(){
-        return y_pos;
-    }
-
-    public int getX_Position(){
-        return x_pos;
     }
 }

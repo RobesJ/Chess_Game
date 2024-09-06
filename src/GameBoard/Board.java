@@ -30,7 +30,7 @@ public class Board extends JPanel {
 
         for(int i = 0; i <8; i++){
             for(int j = 0; j <8; j++){
-                tiles[i][j] = new Square(x_pos,y_pos,null);
+                tiles[i][j] = new Square(null);
                 this.add(tiles[i][j]);
                 if ((j % 2 == 0 && i % 2 == 0) || (j % 2 == 1 && i % 2 == 1)) {
                     tiles[i][j].setBackground(Color.GRAY);
@@ -115,6 +115,14 @@ public class Board extends JPanel {
                     tiles[row][col].setFigure(selectedFigure);
                     selectedFigure = null;
                 }
+            }
+            //pick another figure of the same color
+            else if(selectedFigure.isWhite() == tiles[row][col].getFigure().isWhite()){
+                tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(false);
+                selectedFigure_row = row;
+                selectedFigure_col = col;
+                selectedFigure = tiles[selectedFigure_row][selectedFigure_col].getFigure();
+                tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(true);
             }
         //if square does not contain figure then move the selected figure, if the movement is valid for the selected figure
         } else if (!tiles[row][col].containsFigure()){
