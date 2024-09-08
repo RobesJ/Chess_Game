@@ -13,6 +13,7 @@ public class Square extends JPanel {
         this.figure = figure;
         label = new JLabel();
         label.setOpaque(false);
+        //label.setPreferredSize(new Dimension(100,100));
         label.setVisible(false);
         label.setBackground(new Color(204,229,255));
         this.add(label);
