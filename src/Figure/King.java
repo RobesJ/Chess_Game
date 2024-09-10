@@ -1,6 +1,4 @@
 package Figure;
-
-import GameBoard.Board;
 import GameBoard.Square;
 
 import javax.imageio.ImageIO;
@@ -31,17 +29,35 @@ public class King extends AbstractFigure{
     public King(boolean White, boolean killed){
         super(White, killed);
     }
+
     public Icon getWhiteKingIcon(){
         return whiteKingIcon;
     }
+
     public Icon getBlackKingIcon(){
         return blackKingIcon;
     }
 
     @Override
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        return (Math.abs(end_pos[0] - start_pos[0]) == 0 || Math.abs(end_pos[0] - start_pos[0]) == 1) &&
-                (Math.abs(end_pos[1] - start_pos[1]) == 0 || Math.abs(end_pos[1] - start_pos[1]) == 1);
-
+    public void getMovingOption(int[] current_pos, Square[][] tiles){
+        int [][] directions = {
+                {-1, 0}, {1, 0},
+                { 0,-1}, {0, 1},
+                {-1,-1}, {1, 1},
+                {-1, 1}, {1,-1}
+        };
+        for(int[] direction : directions){
+            int x = current_pos[0] + direction[0];
+            int y = current_pos[1] + direction[1];
+            if(x < 0|| x > 7 || y < 0 || y >7){
+                continue;
+            }
+            if(!tiles[x][y].containsFigure()){
+                options.add(tiles[x][y]);
+            }
+            else if (tiles[x][y].containsFigure() && (isWhite() != tiles[x][y].getFigure().isWhite())) {
+                options.add(tiles[x][y]);
+            }
+        }
     }
 }

@@ -1,19 +1,20 @@
 package GameBoard;
 
 import Figure.*;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class Square extends JPanel {
     private AbstractFigure figure;
     private final JLabel label;
+    private int row;
+    private int col;
+    private boolean currentOption = false;
 
     public Square(AbstractFigure figure){
         this.figure = figure;
         label = new JLabel();
         label.setOpaque(false);
-        //label.setPreferredSize(new Dimension(100,100));
         label.setVisible(false);
         label.setBackground(new Color(204,229,255));
         this.add(label);
@@ -77,5 +78,34 @@ public class Square extends JPanel {
 
     public JLabel getLabel(){
         return label;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setCurrentOption(boolean currentOption){
+        this.currentOption = currentOption;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (currentOption) {
+            g.setColor(Color.RED);  // Color for the circles
+            // Calculate the center of the square
+            int centerX = 100 / 2;
+            int centerY = 100 / 2;
+
+            // Draw a circle in the center of the square
+            int radius = 100 / 4;
+            g.fillOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+        }
     }
 }

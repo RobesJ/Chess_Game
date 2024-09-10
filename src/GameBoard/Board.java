@@ -10,12 +10,11 @@ public class Board extends JPanel {
     private final Player player1, player2;
     private Player currentPlayer;
     private final Square[][] tiles;
-    int x_pos = 0;
-    int y_pos = 0;
     private AbstractFigure selectedFigure;
-    private int selectedFigure_col=0;
-    private int selectedFigure_row=0;
+    private int selectedFigure_col = 0;
+    private int selectedFigure_row = 0;
     private boolean checkMate = false;
+    private boolean check = false;
 
     public Board(){
         player1 = new Player("Džošua", "BLACK");
@@ -31,18 +30,16 @@ public class Board extends JPanel {
         for(int i = 0; i <8; i++){
             for(int j = 0; j <8; j++){
                 tiles[i][j] = new Square(null);
+                tiles[i][j].setRow(i);
+                tiles[i][j].setCol(j);
                 this.add(tiles[i][j]);
                 if ((j % 2 == 0 && i % 2 == 0) || (j % 2 == 1 && i % 2 == 1)) {
                     tiles[i][j].setBackground(Color.GRAY);
                 } else {
                     tiles[i][j].setBackground(Color.WHITE);
                 }
-                x_pos+=100;
             }
-            x_pos = 0;
-            y_pos +=100;
         }
-
         initFigures();
 
         this.addMouseListener(new MouseAdapter() {
@@ -103,6 +100,8 @@ public class Board extends JPanel {
                 //if nothing is selected yet
                 if (selectedFigure == null) {
                     selectedFigure = tiles[row][col].getFigure();
+                    selectedFigure.getMovingOption(new int[]{row,col}, tiles);
+                    selectedFigure.showOptions();
                     tiles[row][col].getLabel().setOpaque(true);
                     selectedFigure_col = col;
                     selectedFigure_row = row;
@@ -110,6 +109,7 @@ public class Board extends JPanel {
 
                 // clicked on already selected, same figure
                 else if (selectedFigure.equals(tiles[row][col].getFigure())) {
+                    selectedFigure.removeOptions();
                     selectedFigure = null;
                     tiles[row][col].getLabel().setOpaque(false);
                 }
@@ -119,7 +119,10 @@ public class Board extends JPanel {
                     tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(false);
                     selectedFigure_row = row;
                     selectedFigure_col = col;
+                    selectedFigure.removeOptions();
                     selectedFigure = tiles[selectedFigure_row][selectedFigure_col].getFigure();
+                    selectedFigure.getMovingOption(new int[]{selectedFigure_row,selectedFigure_col}, tiles);
+                    selectedFigure.showOptions();
                     tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(true);
                 }
             }
@@ -127,22 +130,27 @@ public class Board extends JPanel {
             else if (selectedFigure != null) {
                 if (!tiles[row][col].getFigure().isWhite() && currentPlayer.getColor().equals("WHITE") ||
                     (tiles[row][col].getFigure().isWhite() && currentPlayer.getColor().equals("BLACK"))) {
-                    //AbstractFigure figureToKill = tiles[row][col].getFigure();
-                    if (selectedFigure.move(new int[]{selectedFigure_row, selectedFigure_col}, new int[]{row, col}, tiles)) {
-                        //change player
-                        if (currentPlayer.equals(player1)) {
-                            currentPlayer = player2;
-                        } else {
-                            currentPlayer = player1;
-                        }
+
+                    if(selectedFigure.getOptions().contains(tiles[row][col])){
+                        selectedFigure.removeOptions();
+
                         if(tiles[row][col].getFigure().getClass().getSimpleName().equals("King")){
                             checkMate =true;
                         }
+
                         tiles[row][col].getFigure().setKilled(true);
                         tiles[row][col].removeFigure();
                         tiles[selectedFigure_row][selectedFigure_col].removeFigure();
                         tiles[row][col].setFigure(selectedFigure);
+                        selectedFigure.getMovingOption(new int[]{row,col}, tiles);
+                        selectedFigure.checkKingThreat(this);
+                        if(check){
+                            System.out.println("king is under threat");
+                        }
+
                         selectedFigure = null;
+                        //change player
+                        currentPlayer = currentPlayer.equals(player1) ? player2 : player1;
                     }
                 }
             }
@@ -151,18 +159,19 @@ public class Board extends JPanel {
         //if square does not contain figure then move the selected figure, if the movement is valid for the selected figure
         else if (!tiles[row][col].containsFigure()) {
             if (selectedFigure != null) {
-                if (selectedFigure.move(new int[]{selectedFigure_row, selectedFigure_col}, new int[]{row, col}, tiles)) {
-                    //change player
-                    if (currentPlayer.equals(player1)) {
-                        currentPlayer = player2;
-                    } else {
-                        currentPlayer = player1;
-                    }
-
+                if(selectedFigure.getOptions().contains(tiles[row][col])){
+                    selectedFigure.removeOptions();
                     tiles[selectedFigure_row][selectedFigure_col].removeFigure();
                     tiles[selectedFigure_row][selectedFigure_col].getLabel().setOpaque(false);
                     tiles[row][col].setFigure(selectedFigure);
+                    selectedFigure.getMovingOption(new int[]{row,col}, tiles);
+                    selectedFigure.checkKingThreat(this);
+                    if(check){
+                        System.out.println("king is under threat");
+                    }
                     selectedFigure = null;
+                    //change player
+                    currentPlayer = currentPlayer.equals(player1) ? player2 : player1;
                 }
             }
         }
@@ -170,7 +179,7 @@ public class Board extends JPanel {
         repaint();
     }
 
-    public boolean isCheckMate(){
-        return checkMate;
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }

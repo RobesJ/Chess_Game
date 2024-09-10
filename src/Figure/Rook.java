@@ -37,26 +37,32 @@ public class Rook extends AbstractFigure {
     }
 
     @Override
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        if(start_pos[0] == end_pos[0] && (Math.abs(end_pos[1] - start_pos[1]) !=0)){
-            int step = (end_pos[1] > start_pos[1]) ? 1 : -1;
-            for (int x = start_pos[1] + step; x != end_pos[1]; x += step) {
-                if(tiles[start_pos[0]][x].containsFigure()){
-                    return false;
+    public void getMovingOption(int[] currentPos, Square[][] tiles) {
+        options.clear();
+        int [][] directions = {
+            {-1,0}, {1,0},
+            {0,-1}, {0,1}
+        };
+
+        for(int[] direction : directions){
+            int x = currentPos[0];
+            int y = currentPos[1];
+            while(true){
+                x += direction[0];
+                y += direction[1];
+                if(x<0 || x > 7 || y < 0 || y >7){
+                    break;
                 }
-            }
-            return true;
-        }
-        else if (start_pos[1] == end_pos[1] && (Math.abs(end_pos[0] - start_pos[0]) != 0)) {
-            int step = (end_pos[0] > start_pos[0]) ? 1 : -1;
-            for (int x = start_pos[0] + step; x != end_pos[0]; x += step) {
-                if (tiles[x][start_pos[1]].containsFigure()) {
-                    return false;
+                if(!tiles[x][y].containsFigure()){
+                    options.add(tiles[x][y]);
                 }
+                else if(tiles[x][y].containsFigure() && (this.isWhite() != tiles[x][y].getFigure().isWhite())){
+                    options.add(tiles[x][y]);
+                    break;
+                }
+                else
+                    break;
             }
-            return true;
         }
-        else
-            return false;
     }
 }

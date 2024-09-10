@@ -1,6 +1,6 @@
 package Figure;
-import GameBoard.Square;
 
+import GameBoard.Square;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -38,23 +38,58 @@ public class Pawn extends AbstractFigure{
         return blackPawnIcon;
     }
 
-    //[0] = row, [1] = col
     @Override
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        if(!tiles[end_pos[0]][end_pos[1]].containsFigure()){
-            if (isWhite()) {
-                if (start_pos[0] == beginningRow) {
-                    return start_pos[1] == end_pos[1] && (start_pos[0] - end_pos[0] == 1 || start_pos[0] - end_pos[0] == 2);
+    public void getMovingOption(int[] current_pos, Square[][] tiles){
+        options.clear();
+        int [][] directionsUp = {
+            {-1, 0},
+            {-1,-1}, {-1, 1} //killing when going up
+        };
+        int [][] directionsDown = {
+            {1, 0},
+            {1,-1}, {1, 1} //killing when going down
+        };
+
+        if(beginningRow == 1) {
+            int x = current_pos[0] + directionsDown[0][0];
+            int y = current_pos[1];
+            if(!tiles[x][y].containsFigure()){
+                options.add(tiles[x][y]);
+                if(beginningRow == current_pos[0] && !tiles[x + directionsDown[0][0]][y].containsFigure()){
+                    options.add(tiles[x + directionsDown[0][0]][y]);
                 }
-                return start_pos[1] == end_pos[1] && start_pos[0] - end_pos[0] == 1;
-            } else {
-                if (start_pos[0] == beginningRow) {
-                    return start_pos[1] == end_pos[1] && (end_pos[0] - start_pos[0] == 1 || end_pos[0] - start_pos[0] == 2);
+            }
+            for(int i =1; i < directionsDown.length; i++){
+                x = current_pos[0] + directionsDown[i][0];
+                y = current_pos[1] + directionsDown[i][1];
+                if (y < 0 || y > 7) {
+                    continue;
                 }
-                return start_pos[1] == end_pos[1] && end_pos[0] - start_pos[0] == 1;
+                if(tiles[x][y].containsFigure() && (isWhite() != tiles[x][y].getFigure().isWhite())){
+                    options.add(tiles[x][y]);
+                }
             }
         }
-        else
-            return (Math.abs(end_pos[0]-start_pos[0]) ==1) && (Math.abs(end_pos[1]-start_pos[1]) ==1) && tiles[end_pos[0]][end_pos[1]].containsFigure();
+
+        else if(beginningRow ==6){
+            int x = current_pos[0] + directionsUp[0][0];
+            int y = current_pos[1];
+            if(!tiles[x][y].containsFigure()){
+                options.add(tiles[x][y]);
+                if(beginningRow == current_pos[0] && !tiles[x + directionsUp[0][0]][y].containsFigure()){
+                    options.add(tiles[x + directionsUp[0][0]][y]);
+                }
+            }
+            for(int i =1; i < directionsUp.length; i++){
+                x = current_pos[0] + directionsUp[i][0];
+                y = current_pos[1] + directionsUp[i][1];
+                if (y < 0 || y > 7) {
+                    continue;
+                }
+                if(tiles[x][y].containsFigure() && (isWhite() != tiles[x][y].getFigure().isWhite())){
+                    options.add(tiles[x][y]);
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 package Figure;
 
 import GameBoard.Square;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -33,27 +32,38 @@ public class Bishop extends AbstractFigure{
     public Icon getWhiteBishopIcon(){
         return whiteBishopIcon;
     }
+
     public Icon getBlackBishopIcon(){
         return blackBishopIcon;
     }
 
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        if(Math.abs(end_pos[0] - start_pos[0]) == Math.abs(end_pos[1] - start_pos[1])) {
-            int stepRow = (end_pos[0] > start_pos[0]) ? 1 : -1;
-            int stepCol = (end_pos[1] > start_pos[1]) ? 1 : -1;
+    @Override
+    public void getMovingOption(int[] current_pos, Square[][] tiles) {
+        options.clear();
+        int [][] directions = {
+            {-1,-1},{1,1},
+            {-1,1}, {1,-1}
+        };
 
-            int x = start_pos[0] + stepRow;
-            int y = start_pos[1] + stepCol;
-
-            while (x != end_pos[0] && y != end_pos[1]) {
-                if (tiles[x][y].containsFigure()) {
-                    return false;
+        for(int[] direction : directions){
+            int x = current_pos[0];
+            int y = current_pos[1];
+            while(true){
+                x += direction[0];
+                y += direction[1];
+                if(x<0 || x > 7 || y < 0 || y >7){
+                    break;
                 }
-                x += stepRow;
-                y += stepCol;
+                if(!tiles[x][y].containsFigure()){
+                    options.add(tiles[x][y]);
+                }
+                else if(tiles[x][y].containsFigure() && (this.isWhite() != tiles[x][y].getFigure().isWhite())){
+                    options.add(tiles[x][y]);
+                    break;
+                }
+                else
+                    break;
             }
-            return true;
         }
-        return false;
     }
 }

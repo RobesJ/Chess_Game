@@ -1,7 +1,6 @@
 package Figure;
 
 import GameBoard.Square;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +27,7 @@ public class Queen extends AbstractFigure{
 
     public Queen(boolean White, boolean killed){
         super(White, killed);
+        //options = new ArrayList<>();
     }
     public Icon getWhiteQueenIcon(){
         return whiteQueenIcon;
@@ -37,41 +37,34 @@ public class Queen extends AbstractFigure{
     }
 
     @Override
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        if(start_pos[0] == end_pos[0] && (Math.abs(end_pos[1] - start_pos[1]) !=0)){
-            int step = (end_pos[1] > start_pos[1]) ? 1 : -1;
-            for (int x = start_pos[1] + step; x != end_pos[1]; x += step) {
-                if(tiles[start_pos[0]][x].containsFigure()){
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (start_pos[1] == end_pos[1] && (Math.abs(end_pos[0] - start_pos[0]) != 0)) {
-            int step = (end_pos[0] > start_pos[0]) ? 1 : -1;
-            for (int x = start_pos[0] + step; x != end_pos[0]; x += step) {
-                if (tiles[x][start_pos[1]].containsFigure()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (Math.abs(end_pos[0] - start_pos[0]) == Math.abs(end_pos[1] - start_pos[1])) {
-            int xStep = (end_pos[0] > start_pos[0]) ? 1 : -1;
-            int yStep = (end_pos[1] > start_pos[1]) ? 1 : -1;
+    public void getMovingOption(int[] current_pos, Square[][] tiles){
+        options.clear();
+        int [][] directions = {
+                {-1, 0}, {1, 0},
+                { 0,-1}, {0, 1},
+                {-1,-1}, {1, 1},
+                {-1, 1}, {1,-1}
+        };
 
-            int x = start_pos[0] + xStep;
-            int y = start_pos[1] + yStep;
-            while (x != end_pos[0] && y != end_pos[1]) {
-                if (tiles[x][y].containsFigure()) {
-                    return false;
+        for(int[] direction : directions){
+            int x = current_pos[0];
+            int y = current_pos[1];
+            while(true){
+                x += direction[0];
+                y += direction[1];
+                if(x < 0 || x > 7 || y < 0 || y > 7){
+                    break;
                 }
-                x += xStep;
-                y += yStep;
+                if(!tiles[x][y].containsFigure()){
+                    options.add(tiles[x][y]);
+                }
+                else if(tiles[x][y].containsFigure() && (isWhite() != tiles[x][y].getFigure().isWhite())){
+                    options.add(tiles[x][y]);
+                    break;
+                }
+                else
+                    break;
             }
-            return true;
         }
-        else
-            return false;
     }
 }

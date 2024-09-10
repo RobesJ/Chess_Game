@@ -1,6 +1,6 @@
 package Figure;
-import GameBoard.Square;
 
+import GameBoard.Square;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -28,16 +28,37 @@ public class Knight extends AbstractFigure{
     public Knight(boolean White, boolean killed){
         super(White, killed);
     }
+
     public Icon getWhiteKnightIcon(){
         return whiteKnightIcon;
     }
+
     public Icon getBlackKnightIcon(){
         return blackKnightIcon;
     }
 
+
     @Override
-    public boolean move(int[] start_pos, int[] end_pos, Square[][] tiles){
-        return  (Math.abs(end_pos[0] - start_pos[0]) == 2 && Math.abs(end_pos[1] -start_pos[1]) == 1) ||
-                (Math.abs(end_pos[0] - start_pos[0]) == 1 && Math.abs(end_pos[1] -start_pos[1]) == 2);
+    public void getMovingOption(int[] current_pos, Square[][] tiles){
+        options.clear();
+        int [][] directions = {
+                { 2,-1}, { 2, 1},
+                {-2,-1}, {-2, 1},
+                {-1, 2}, { 1, 2},
+                {-1,-2}, { 1,-2}
+        };
+        for(int[] direction : directions){
+            int x = current_pos[0] + direction[0];
+            int y = current_pos[1] + direction[1];
+            if(x < 0|| x > 7 || y < 0 || y >7){
+                continue;
+            }
+            if(!tiles[x][y].containsFigure()){
+                options.add(tiles[x][y]);
+            }
+            else if (tiles[x][y].containsFigure() && (isWhite() != tiles[x][y].getFigure().isWhite())) {
+                options.add(tiles[x][y]);
+            }
+        }
     }
 }
